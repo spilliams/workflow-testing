@@ -1,0 +1,16 @@
+---
+name: "Generate Links"
+
+on:
+  workflow_dispatch
+
+jobs:
+  make-links:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: |
+        echo "github.action: ${{ github.action }}"
+        echo "github.job: ${{ github.job }}"
+        echo "github.run_id: ${{ github.run_id }}"
+        echo "github.run_number: ${{ github.run_number }}"
+        echo "github.run_attempt: ${{ github.run_attempt }}"
