@@ -1,0 +1,32 @@
+---
+name: "Print some variables"
+
+on:
+  workflow_call:
+    inputs:
+      variableA:
+        description: "Variable A"
+        type: string
+        required: false
+      variableB:
+        description: "Variable B"
+        type: string
+        required: false
+    secrets:
+      secretA:
+        description: "Secret A"
+        required: false
+      secretB:
+        description: "Secret B"
+        required: false
+  
+jobs:
+  print-everything:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Print
+        run: |
+          echo 'variable A: ${{ inputs.variableA }}';
+          echo 'variable B: ${{ inputs.variableB }}';
+          echo 'secret A: ${{ secrets.secretA }}';
+          echo 'secret B: ${{ secrets.secretB }}';

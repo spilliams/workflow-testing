@@ -1,0 +1,13 @@
+---
+name: "Use the reusable printer"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-variable-printer:
+    name: Call the variable printer
+    uses: relsqui/workflow-testing/.github/workflows/reusable-printer.yml@main
+    with:
+      variableA: Apple
+      variableB: Banana
