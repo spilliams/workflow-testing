@@ -10,4 +10,5 @@ jobs:
     uses: relsqui/workflow-testing/.github/workflows/reusable-printer.yml@main
     with:
       variableA: Apple
-      variableB: Banana
+    secrets:
+      secretA: secretApple
