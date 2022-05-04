@@ -1,0 +1,29 @@
+{
+  "extends": ["config:base"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "pre-commit": {
+    "enabled": true,
+    "fileMatch": ["docker/.pre-commit-config.yaml"]
+  },
+  "packageRules": [
+    {
+      "matchPackagePatterns": ".*",
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all dependencies (non-major versions)",
+      "groupSlug": "all"
+    },
+    {
+      "matchManagers": ["pyenv"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "python version (minor)"
+    }
+  ],
+  "pin": {
+    "enabled": false
+  },
+  "schedule": ["before 3am on Monday"],
+  "separateMajorMinor": true,
+  "timezone": "America/Los_Angeles"
+}
