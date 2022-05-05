@@ -4,8 +4,7 @@
     "enabled": true
   },
   "pre-commit": {
-    "enabled": true,
-    "fileMatch": ["docker/.pre-commit-config.yaml"]
+    "enabled": true
   },
   "packageRules": [
     {
