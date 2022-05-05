@@ -1,0 +1,10 @@
+---
+quiet: true # don't tell us about checks that pass
+skip-check:
+  - CKV_AWS_143 # it is not normal to lock objects so they can't be deleted (only used in audit account)
+  - CKV_AWS_144 # we do not currently require cross-site replication for s3 buckets
+  - CKV_AWS_145 # s3 buckets may use service key to encrypt (there are other rules that enforce general encryption)
+  - CKV_AWS_149 # secrets manager may use service key to encrypt
+skip-path:
+  - provider.tf # is generated, not checked in; it's okay if it contains secrets
+  - .terragrunt-cache # is generated, not checked in; it's okay if it contains secrets
