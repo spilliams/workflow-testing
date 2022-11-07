@@ -1,0 +1,54 @@
+---
+name: "Artifact Upload Debugging"
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  touch-file:
+    runs-on: ubuntu-20.04
+    name: "Example"
+    steps:
+      - name: "Make some files"
+        run: |
+          mkdir -p terraform/roots/platform/phase/domain/env/region/root/
+          echo "help i'm an error" > terraform/roots/platform/phase/domain/env/region/root/errors.out
+          echo "plan output" > terraform/roots/platform/phase/domain/env/region/root/tfplan.out
+          tree
+      - name: "Run a script to show plan"
+        run: |
+          mkdir -p changes
+          cp terraform/roots/platform/phase/domain/env/region/root/tfplan.out changes/platform_phase_domain_env_region_root.summary
+          mkdir -p errors
+          cp terraform/roots/platform/phase/domain/env/region/root/errors.out errors/platform_phase_domain_env_region_root.error
+      - name: "Upload changes"
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          path: changes/*
+          name: platform_domain_env_region_root
+          retention-days: 1
+      - name: "Upload errors"
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          path: errors/*
+          name: platform_domain_env_region_root_run${{github.run_attempt}}
+          retention-days: 1
+  post-plans:
+    name: Post Plan Results
+    runs-on: ubuntu-20.04
+    if: always()
+    steps:
+      - name: Download plan results
+        uses: actions/download-artifact@v3
+        with:
+          path: plans
+      - name: Aggregate plan results
+        id: aggregate-results
+        run: |
+          tree
