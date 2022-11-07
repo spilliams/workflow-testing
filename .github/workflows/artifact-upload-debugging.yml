@@ -43,6 +43,7 @@ jobs:
     name: Post Plan Results
     runs-on: ubuntu-20.04
     if: always()
+    needs: touch-file
     steps:
       - name: Download plan results
         uses: actions/download-artifact@v3
