@@ -1,0 +1,21 @@
+---
+name: "Boilerplate"
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  example:
+    runs-on: ubuntu-20.04
+    name: "Example"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+        with:
+          # get the whole repo, not just the last commit, so
+          # we can compare changes on this branch to main
+          fetch-depth: 0
