@@ -25,7 +25,7 @@ jobs:
       - name: "Resolve my-flag"
         id: resolve-flag
         run: |
-          if [[ -z ${{inputs.my-flag}} ]]; then
+          if [[ -z "${{inputs.my-flag}}" ]]; then
             echo "my-flag=false" >> "$GITHUB_OUTPUT"
           else
             echo "my-flag=${{inputs.my-flag}}" >> "$GITHUB_OUTPUT"
