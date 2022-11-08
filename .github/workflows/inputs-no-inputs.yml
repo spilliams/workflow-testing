@@ -22,15 +22,12 @@ jobs:
     runs-on: ubuntu-20.04
     name: "Example"
     steps:
-      - name: "Resolve my-flag"
-        id: resolve-flag
-        run: |
-          if [[ -z "${{inputs.my-flag}}" ]]; then
-            echo "my-flag=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "my-flag=${{inputs.my-flag}}" >> "$GITHUB_OUTPUT"
-          fi
+      - id: resolve-flag
+        uses: actions/github-script@v6
+        with:
+          script: return inputs.my-flag || false
+          result-encoding: boolan
       - run: |
-          echo "output: ${{ steps.resolve-flag.outputs.my-flag }}"
+          echo "output: ${{ steps.resolve-flag.outputs.result }}"
           echo "env: ${{ env.my-flag }}"
           echo "my flag: ${{ inputs.my-flag }}"
