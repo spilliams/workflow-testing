@@ -1,0 +1,27 @@
+---
+name: "Inputs No Inputs"
+
+on:
+  workflow_dispatch:
+    inputs:
+      my-flag:
+        description: "My flag"
+        type: boolean
+        default: false
+        required: false
+  push:
+    branches-ignore:
+      - main
+  
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  example:
+    runs-on: ubuntu-20.04
+    name: "Example"
+    steps:
+      - run: |
+          echo "my flag: ${{ inputs.my-flag }}"
