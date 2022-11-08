@@ -10,9 +10,11 @@ on:
         default: false
         required: false
   push:
-    branches-ignore:
-      - main
-  
+    branches:
+      - inputs-no-inputs
+
+env:
+  my-flag: ${{ inputs.my-flag }} || false
 
 defaults:
   run:
@@ -24,4 +26,5 @@ jobs:
     name: "Example"
     steps:
       - run: |
+          echo "env: ${{ env.my-flag }}"
           echo "my flag: ${{ inputs.my-flag }}"
