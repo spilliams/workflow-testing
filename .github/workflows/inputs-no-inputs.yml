@@ -30,7 +30,7 @@ jobs:
               return false;
             }
             return ${{inputs.my-flag}};
-          result-encoding: boolan
+          result-encoding: json
       - run: |
           echo "output: ${{ steps.resolve-flag.outputs.result }}"
           echo "env: ${{ env.my-flag }}"
