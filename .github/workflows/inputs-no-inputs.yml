@@ -25,7 +25,11 @@ jobs:
       - id: resolve-flag
         uses: actions/github-script@v6
         with:
-          script: return inputs.my-flag || false
+          script: |
+            if (inputs === undefined) {
+              return false;
+            }
+            return inputs.my-flag;
           result-encoding: boolan
       - run: |
           echo "output: ${{ steps.resolve-flag.outputs.result }}"
