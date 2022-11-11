@@ -1,0 +1,23 @@
+---
+name: "Cleanup"
+
+on:
+  # We have to use the delete trigger (instead of for example a push to main trigger)
+  # because delete is the only trigger that gives us a git ref telling us what branch
+  # was just deleted after merge. Also, in the case where we delete a branch without merging,
+  # this is the only way the dev deploy can be cleaned up.
+  delete:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  compute-tags:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Compute tags to delete"
+        run: |
+          # TODO
+          echo ${{ github.event.ref }}
+      - name: "Delete image caches"
