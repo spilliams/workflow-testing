@@ -1,6 +1,3 @@
-# syntax=docker/dockerfile:1.2
-FROM golang:1.19.3@sha256:7ffa70183b7596e6bc1b78c132dbba9a6e05a26cd30eaa9832fecad64b83f029 as golang
-
 FROM ubuntu:22.04@sha256:4b1d0c4a2d2aaf63b37111f34eb9fa89fa1bf53dd6e4ca954d47caebca4005c2 as dev
 
 ARG TARGETPLATFORM
@@ -100,11 +97,11 @@ RUN set -ex && \
 ##################################
 #  Install Golang
 ##################################
-ENV PATH="/usr/local/go/bin:${PATH}"
-# Since Golang releases pre-compiled binaries for each
-# OS + arch, and Docker just builds those binaries into the
-# default golang image, we can just copy over the files.
-COPY --from=golang /usr/local/go /usr/local/go
+# ENV PATH="/usr/local/go/bin:${PATH}"
+# # Since Golang releases pre-compiled binaries for each
+# # OS + arch, and Docker just builds those binaries into the
+# # default golang image, we can just copy over the files.
+# COPY --from=golang /usr/local/go /usr/local/go
 
 ##################################
 #  Install Python
