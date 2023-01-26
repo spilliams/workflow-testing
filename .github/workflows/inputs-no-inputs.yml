@@ -10,9 +10,8 @@ on:
         default: false
         required: false
   push:
-    branches-ignore:
-      - main
-  
+    branches:
+      - inputs-no-inputs
 
 defaults:
   run:
@@ -23,5 +22,16 @@ jobs:
     runs-on: ubuntu-20.04
     name: "Example"
     steps:
+      - id: resolve-flag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if ("${{inputs.my-flag}}" === "") {
+              return false;
+            }
+            return ${{inputs.my-flag}};
+          result-encoding: json
       - run: |
+          echo "output: ${{ steps.resolve-flag.outputs.result }}"
+          echo "env: ${{ env.my-flag }}"
           echo "my flag: ${{ inputs.my-flag }}"
