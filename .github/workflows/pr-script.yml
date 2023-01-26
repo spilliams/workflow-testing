@@ -21,6 +21,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          # get the whole repo, not just the last commit, so
+          # we can compare changes on this branch to main
+          fetch-depth: 0
       - name: Script
         run: |
           # useful if this job runs in a container
