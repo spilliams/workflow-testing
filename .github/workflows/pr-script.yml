@@ -73,7 +73,7 @@ jobs:
           do
             dir=$(dirname $filename)
             echo "  $dir"
-            if [[ dir -eq "terraform/roots/silver/100-pre-bootstrap" ]]; then
+            if [[ dir == "terraform/roots/silver/100-pre-bootstrap" ]]; then
               COUNT=1
             fi
           done
