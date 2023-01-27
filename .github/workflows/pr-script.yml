@@ -74,7 +74,7 @@ jobs:
             dir=$(dirname $filename)
             echo "  $dir"
             if [[ $dir == "terraform/roots/silver/100-pre-bootstrap" ]]; then
-              COUNT=1
+              export COUNT=1
             fi
           done
           echo "Silver 100 count: $COUNT"
