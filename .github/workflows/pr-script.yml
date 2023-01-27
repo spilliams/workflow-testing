@@ -31,6 +31,10 @@ jobs:
           # get the whole repo, not just the last commit, so
           # we can compare changes on this branch to main
           fetch-depth: 0
+      - name: "Build Silver 100"
+        id: build-silver-100
+        run: |
+          git diff HEAD origin/main
       - name: "Build Silver 200 Matrix"
         id: build-silver-200-matrix
         run: |
