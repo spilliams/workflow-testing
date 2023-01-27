@@ -93,13 +93,16 @@ jobs:
         id: count-expected-plans
         env:
           matrix200: ${{ needs.build-matrices.outputs.matrix-silver-200 }}
+          matrix300: ${{ needs.build-matrices.outputs.matrix-silver-300 }}
+          matrix400: ${{ needs.build-matrices.outputs.matrix-silver-400 }}
+          matrix500: ${{ needs.build-matrices.outputs.matrix-silver-500 }}
+          matrix510: ${{ needs.build-matrices.outputs.matrix-silver-510 }}
         run: |
           count200=$(echo $matrix200 | jq '.include | length')
-          
-# count200=$(echo  | jq '.include | length')
-# count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
-# count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
-# count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
-# count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
-# count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
-# echo "count=$count" >> "$GITHUB_OUTPUT"
+          count300=$(echo $matrix300 | jq '.include | length')
+          count400=$(echo $matrix400 | jq '.include | length')
+          count500=$(echo $matrix500 | jq '.include | length')
+          count510=$(echo $matrix510 | jq '.include | length')
+          count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
+          echo "count=$count"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
