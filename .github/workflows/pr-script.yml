@@ -67,6 +67,7 @@ jobs:
         id: build-silver-100
         run: |
           COUNT=0
+          git diff HEAD origin/main --name-only
           git diff HEAD origin/main --name-only | \
           while read filename
           do
