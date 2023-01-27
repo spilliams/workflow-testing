@@ -25,46 +25,96 @@ jobs:
       matrix-silver-400: ${{ steps.build-silver-400-matrix.outputs.matrix }}
       matrix-silver-500: ${{ steps.build-silver-500-matrix.outputs.matrix }}
       matrix-silver-510: ${{ steps.build-silver-510-matrix.outputs.matrix }}
+      # matrix-gold-200: ${{ steps.build-gold-200-matrix.outputs.matrix }}
+      # matrix-gold-300: ${{ steps.build-gold-300-matrix.outputs.matrix }}
+      # matrix-gold-400: ${{ steps.build-gold-400-matrix.outputs.matrix }}
+      # matrix-gold-500: ${{ steps.build-gold-500-matrix.outputs.matrix }}
+      # matrix-gold-510: ${{ steps.build-gold-510-matrix.outputs.matrix }}
+      count-silver-migration: ${{ steps.build-silver-migration.outputs.count }}
+      count-silver-100: ${{ steps.build-silver-100.outputs.count }}
+      count-silver-200: ${{ steps.build-silver-200-matrix.outputs.count }}
+      count-silver-300: ${{ steps.build-silver-300-matrix.outputs.count }}
+      count-silver-400: ${{ steps.build-silver-400-matrix.outputs.count }}
+      count-silver-500: ${{ steps.build-silver-500-matrix.outputs.count }}
+      count-silver-510: ${{ steps.build-silver-510-matrix.outputs.count }}
+      # count-gold-200: ${{ steps.build-gold-200-matrix.outputs.count }}
+      # count-gold-300: ${{ steps.build-gold-300-matrix.outputs.count }}
+      # count-gold-400: ${{ steps.build-gold-400-matrix.outputs.count }}
+      # count-gold-500: ${{ steps.build-gold-500-matrix.outputs.count }}
+      # count-gold-510: ${{ steps.build-gold-510-matrix.outputs.count }}
+      count: ${{ steps.count.outputs.count }}
     steps:
       - uses: actions/checkout@v3
         with:
           # get the whole repo, not just the last commit, so
           # we can compare changes on this branch to main
           fetch-depth: 0
+      - name: "Build Silver Migration"
+        id: build-silver-migration
+        run: |
+          COUNT=0
+          git diff HEAD origin/main --name-only | \
+          while read filename
+          do
+            dir=$(dirname $filename)
+            if [[ $dir == "terraform/roots/silver/migrations" ]]; then
+              COUNT=1
+            fi
+          done
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 100"
         id: build-silver-100
         run: |
-          git diff HEAD origin/main
+          COUNT=0
+          git diff HEAD origin/main --name-only | \
+          while read filename
+          do
+            dir=$(dirname $filename)
+            if [[ $dir == "terraform/roots/silver/100-pre-bootstrap" ]]; then
+              COUNT=1
+            fi
+          done
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 200 Matrix"
         id: build-silver-200-matrix
         run: |
           MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$MATRIX" | jq '.include | length')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 300 Matrix"
         id: build-silver-300-matrix
         run: |
           MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$MATRIX" | jq '.include | length')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 400 Matrix"
         id: build-silver-400-matrix
         run: |
           MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$MATRIX" | jq '.include | length')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 500 Matrix"
         id: build-silver-500-matrix
         run: |
           MATRIX="$(cat matrix2.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$MATRIX" | jq '.include | length')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 510 Matrix"
         id: build-silver-510-matrix
         run: |
           MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$MATRIX" | jq '.include | length')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       # - name: Build Matrices
       #   run: |
       #     # useful if this job runs in a container
