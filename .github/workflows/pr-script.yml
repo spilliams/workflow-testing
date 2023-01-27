@@ -92,13 +92,16 @@ jobs:
       - name: Count expected plans
         id: count-expected-plans
         run: |
-          cat <<EOF
-          ${{ needs.build-matrices.outputs.matrix-silver-200 }}
-          EOF | jq '.include | length'
-          # count200=$(echo  | jq '.include | length')
-          # count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
-          # count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
-          # count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
-          # count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
-          # count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
-          # echo "count=$count" >> "$GITHUB_OUTPUT"
+          {
+            echo "<<EOF"
+            echo ${{ needs.build-matrices.outputs.matrix-silver-200 }}
+            echo "EOF"
+          } | jq '.include | length'
+          
+# count200=$(echo  | jq '.include | length')
+# count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
+# count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
+# count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
+# count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
+# count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
+# echo "count=$count" >> "$GITHUB_OUTPUT"
