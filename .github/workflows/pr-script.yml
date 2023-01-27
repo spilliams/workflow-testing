@@ -92,11 +92,7 @@ jobs:
       - name: Count expected plans
         id: count-expected-plans
         run: |
-          {
-            echo "<<EOF"
-            echo "${{ needs.build-matrices.outputs.matrix-silver-200 }}"
-            echo "EOF"
-          } | jq '.include | length'
+          count200=${{ fromJson(needs.build-matrices.outputs.matrix-silver-200).include.length }}
           
 # count200=$(echo  | jq '.include | length')
 # count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
