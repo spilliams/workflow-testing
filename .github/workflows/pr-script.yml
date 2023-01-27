@@ -72,6 +72,7 @@ jobs:
           while read filename
           do
             dir=$(dirname $filename)
+            echo "  $dir"
             if [[ $dir == "terraform/roots/silver/100-pre-bootstrap" ]]; then
               COUNT=1
             fi
