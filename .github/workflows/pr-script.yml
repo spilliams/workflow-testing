@@ -92,26 +92,13 @@ jobs:
       - name: Count expected plans
         id: count-expected-plans
         run: |
-          count200=$(echo ${{ needs.build-matrices.outputs.matrix-silver-200 }} | jq '.include | length')
-          count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
-          count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
-          count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
-          count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
-          count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-      - name: Aggregate plan results
-        id: aggregate-results
-        run: |
-          {
-            echo "comment-body<<EOF"
-            scripts/aggregate_plans.py
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-      - name: Update prepared comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ needs.prepare-pr-comment.outputs.pr }}
-          comment-id: ${{ needs.prepare-pr-comment.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ${{ steps.aggregate-results.outputs.comment-body }}
+          cat <<EOF
+          ${{ needs.build-matrices.outputs.matrix-silver-200 }}
+          EOF | jq '.include | length'
+          # count200=$(echo  | jq '.include | length')
+          # count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
+          # count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
+          # count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
+          # count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
+          # count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
+          # echo "count=$count" >> "$GITHUB_OUTPUT"
