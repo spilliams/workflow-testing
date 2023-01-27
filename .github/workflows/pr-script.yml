@@ -53,27 +53,25 @@ jobs:
         id: build-silver-migration
         run: |
           COUNT=0
-          git diff HEAD origin/main --name-only | \
-          while read filename
+          git diff HEAD origin/main --name-only
+          for filename in $(git diff HEAD origin/main --name-only)
           do
             dir=$(dirname $filename)
-            if [[ $dir == "terraform/roots/silver/migrations" ]]; then
+            if [[ "terraform/roots/silver/migrations" == "$dir" ]]; then
               COUNT=1
             fi
           done
-          echo "Silver Migration count: $COUNT"
+          echo "Silver 100 count: $COUNT"
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 100"
         id: build-silver-100
         run: |
           COUNT=0
           git diff HEAD origin/main --name-only
-          git diff HEAD origin/main --name-only | \
-          while read filename
+          for filename in $(git diff HEAD origin/main --name-only)
           do
             dir=$(dirname $filename)
-            echo "  $dir"
-            if [[ dir == "terraform/roots/silver/100-pre-bootstrap" ]]; then
+            if [[ "terraform/roots/silver/100-pre-bootstrap" == "$dir" ]]; then
               COUNT=1
             fi
           done
