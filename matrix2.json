@@ -1,11 +1,1 @@
-{
-    "include": [
-      {
-        "domain": "red",
-        "env": "stage",
-        "region": "us-west-2",
-        "root": "aws-config-regional",
-        "path": "terraform/roots/silver/500-regions/red/stage/us-west-2/aws-config-regional"
-      }
-    ]
-  }
+{"include": [{"domain": "red", "env": "stage", "region": "us-west-2", "root": "aws-config-regional", "path": "terraform/roots/silver/500-regions/red/stage/us-west-2/aws-config-regional"}]}
