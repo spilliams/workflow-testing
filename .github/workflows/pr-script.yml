@@ -16,26 +16,102 @@ defaults:
     shell: bash
 
 jobs:
-  prscript:
-    name: Script
+  build-matrices:
+    name: Build Matrices
     runs-on: ubuntu-20.04
+    outputs:
+      matrix-silver-200: ${{ steps.build-silver-200-matrix.outputs.matrix }}
+      matrix-silver-300: ${{ steps.build-silver-300-matrix.outputs.matrix }}
+      matrix-silver-400: ${{ steps.build-silver-400-matrix.outputs.matrix }}
+      matrix-silver-500: ${{ steps.build-silver-500-matrix.outputs.matrix }}
+      matrix-silver-510: ${{ steps.build-silver-510-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
         with:
           # get the whole repo, not just the last commit, so
           # we can compare changes on this branch to main
           fetch-depth: 0
-      - name: Script
+      - name: "Build Silver 200 Matrix"
+        id: build-silver-200-matrix
         run: |
-          # useful if this job runs in a container
-          # git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          MATRIX="$(cat matrix1.json)"
+          echo "$MATRIX" | jq
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+      - name: "Build Silver 300 Matrix"
+        id: build-silver-300-matrix
+        run: |
+          MATRIX="$(cat matrix1.json)"
+          echo "$MATRIX" | jq
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+      - name: "Build Silver 400 Matrix"
+        id: build-silver-400-matrix
+        run: |
+          MATRIX="$(cat matrix1.json)"
+          echo "$MATRIX" | jq
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+      - name: "Build Silver 500 Matrix"
+        id: build-silver-500-matrix
+        run: |
+          MATRIX="$(cat matrix2.json)"
+          echo "$MATRIX" | jq
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+      - name: "Build Silver 510 Matrix"
+        id: build-silver-510-matrix
+        run: |
+          MATRIX="$(cat matrix1.json)"
+          echo "$MATRIX" | jq
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+      # - name: Build Matrices
+      #   run: |
+      #     # useful if this job runs in a container
+      #     # git config --global --add safe.directory "$GITHUB_WORKSPACE"
           
-          echo "status:"
-          git status
-          echo "branches:"
-          git branch -la
+      #     echo "status:"
+      #     git status
+      #     echo "branches:"
+      #     git branch -la
 
-          echo "head:"
-          git rev-parse --verify HEAD
-          echo "main:"
-          git rev-parse --verify origin/main~1
+      #     echo "head:"
+      #     git rev-parse --verify HEAD
+      #     echo "main:"
+      #     git rev-parse --verify origin/main~1
+
+  post-plans:
+    name: Post Plan Results
+    runs-on: ubuntu-20.04
+    needs:
+      - build-matrices
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download plan results
+        uses: actions/download-artifact@v3
+        with:
+          path: plans
+      - name: Count expected plans
+        id: count-expected-plans
+        run: |
+          count200=$(echo ${{ needs.build-matrices.outputs.matrix-silver-200 }} | jq '.include | length')
+          count300=$(echo ${{ needs.build-matrices.outputs.matrix-silver-300 }} | jq '.include | length')
+          count400=$(echo ${{ needs.build-matrices.outputs.matrix-silver-400 }} | jq '.include | length')
+          count500=$(echo ${{ needs.build-matrices.outputs.matrix-silver-500 }} | jq '.include | length')
+          count510=$(echo ${{ needs.build-matrices.outputs.matrix-silver-510 }} | jq '.include | length')
+          count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+      - name: Aggregate plan results
+        id: aggregate-results
+        run: |
+          {
+            echo "comment-body<<EOF"
+            scripts/aggregate_plans.py
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Update prepared comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ needs.prepare-pr-comment.outputs.pr }}
+          comment-id: ${{ needs.prepare-pr-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ${{ steps.aggregate-results.outputs.comment-body }}
