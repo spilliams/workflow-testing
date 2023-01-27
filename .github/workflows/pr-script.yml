@@ -94,7 +94,7 @@ jobs:
         run: |
           {
             echo "<<EOF"
-            echo ${{ needs.build-matrices.outputs.matrix-silver-200 }}
+            echo "${{ fromJson(needs.build-matrices.outputs.matrix-silver-200) }}"
             echo "EOF"
           } | jq '.include | length'
           
