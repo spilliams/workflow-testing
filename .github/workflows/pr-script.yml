@@ -42,7 +42,7 @@ jobs:
       # count-gold-400: ${{ steps.build-gold-400-matrix.outputs.count }}
       # count-gold-500: ${{ steps.build-gold-500-matrix.outputs.count }}
       # count-gold-510: ${{ steps.build-gold-510-matrix.outputs.count }}
-      # count: ${{ steps.count.outputs.count }}
+      count: ${{ steps.count.outputs.count }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -107,7 +107,7 @@ jobs:
       - name: "Build Silver 500 Matrix"
         id: build-silver-500-matrix
         run: |
-          MATRIX="$(cat matrix2.json)"
+          MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
           COUNT=$(echo "$MATRIX" | jq '.include | length')
@@ -121,6 +121,18 @@ jobs:
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
           COUNT=$(echo "$MATRIX" | jq '.include | length')
           echo "Silver 510 count: $COUNT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+      - name: "Count all plans"
+        id: count
+        run: |
+          # shellcheck disable=SC2003
+          COUNT="$(expr ${{ steps.build-silver-100.outputs.count }} + \
+            ${{ steps.build-silver-200-matrix.outputs.count }} + \
+            ${{ steps.build-silver-300-matrix.outputs.count }} + \
+            ${{ steps.build-silver-400-matrix.outputs.count }} + \
+            ${{ steps.build-silver-500-matrix.outputs.count }} + \
+            ${{ steps.build-silver-510-matrix.outputs.count }})"
+          echo "All expected plans (100 through 510): $COUNT"
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       # - name: Build Matrices
       #   run: |
