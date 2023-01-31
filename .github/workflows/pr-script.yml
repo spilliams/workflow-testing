@@ -62,24 +62,6 @@ jobs:
           MATRIX="$(cat matrix1.json)"
           echo "$MATRIX" | jq
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
-      - name: "Count all plans"
-        id: count
-        run: |
-          # shellcheck disable=SC2003
-          COUNT="$(expr 0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0 + \
-            0)"
-          echo "All expected plans (100 through 510): $COUNT"
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
           
       # - name: Build Matrices
       #   run: |
