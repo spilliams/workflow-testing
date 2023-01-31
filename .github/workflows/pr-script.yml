@@ -175,6 +175,6 @@ jobs:
           count400=$(echo $matrix400 | jq '.include | length')
           count500=$(echo $matrix500 | jq '.include | length')
           count510=$(echo $matrix510 | jq '.include | length')
-          count=$(expr $count200 + $count300 + $count400 + $count500 + $count510)
+          count="$(echo $(($count200 + $count300 + $count400 + $count500 + $count510)))"
           echo "count=$count"
           echo "count=$count" >> "$GITHUB_OUTPUT"
