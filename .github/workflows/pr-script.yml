@@ -61,7 +61,7 @@ jobs:
               COUNT=1
             fi
           done
-          echo "Silver 100 count: $COUNT"
+          echo "Silver migration count: $COUNT"
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: "Build Silver 100"
         id: build-silver-100
