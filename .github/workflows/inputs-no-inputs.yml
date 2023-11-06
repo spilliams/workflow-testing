@@ -6,7 +6,7 @@ defaults:
     shell: bash
 
 env:
-  MY_FLAG: $${{ (! inputs.my_flag) && '--my-flag' || '' }}
+  MY_FLAG: $${{ (! inputs.my_flag) && '--other-flag' || '--my-flag' }}
 
 on:
   workflow_dispatch:
@@ -37,4 +37,4 @@ jobs:
           echo "previous step output: ${{ steps.resolve_flag.outputs.result }}"
           echo "env.my_flag: ${{ env.my_flag }}"
           echo "env.MY_FLAG: ${{ env.MY_FLAG }}"
-          echo "$$MY_FLAG: $MY_FLAG"
+          echo "MY_FLAG: $MY_FLAG"
