@@ -6,7 +6,7 @@ defaults:
     shell: bash
 
 env:
-  MY_FLAG: $${{ (! inputs.my_flag) && '--other-flag' || '--my-flag' }}
+  MY_FLAG: ${{ (! inputs.my_flag) && '--other-flag' || '--my-flag' }}
 
 on:
   workflow_dispatch:
