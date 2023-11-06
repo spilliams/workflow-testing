@@ -1,37 +1,40 @@
 ---
 name: "Inputs No Inputs"
 
-on:
-  workflow_dispatch:
-    inputs:
-      my-flag:
-        description: "My flag"
-        type: boolean
-        default: false
-        required: false
-  push:
-    branches:
-      - inputs-no-inputs
-
 defaults:
   run:
     shell: bash
+
+env:
+  MY_FLAG: $${{ (! inputs.my_flag) && '--my-flag' || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      my_flag:
+        description: "My flag"
+        type: boolean
+  push:
+    branches:
+      - inputs-no-inputs
 
 jobs:
   example:
     runs-on: ubuntu-20.04
     name: "Example"
     steps:
-      - id: resolve-flag
+      - id: resolve_flag
         uses: actions/github-script@v6
         with:
           script: |
-            if ("${{inputs.my-flag}}" === "") {
+            if ("${{inputs.my_flag}}" === "") {
               return false;
             }
-            return ${{inputs.my-flag}};
+            return ${{inputs.my_flag}};
           result-encoding: json
       - run: |
-          echo "output: ${{ steps.resolve-flag.outputs.result }}"
-          echo "env: ${{ env.my-flag }}"
-          echo "my flag: ${{ inputs.my-flag }}"
+          echo "inputs.my_flag: ${{ inputs.my_flag }}"
+          echo "previous step output: ${{ steps.resolve_flag.outputs.result }}"
+          echo "env.my_flag: ${{ env.my_flag }}"
+          echo "env.MY_FLAG: ${{ env.MY_FLAG }}"
+          echo "$$MY_FLAG: $MY_FLAG"
