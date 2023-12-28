@@ -1,0 +1,37 @@
+---
+name: "Needs Loop"
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+permissions: read-all
+
+jobs:
+  success:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: exit 0
+  failure:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: exit 1
+  skipped:
+    runs-on: ubuntu-20.04
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+  loop:
+    runs-on: ubuntu-20.04
+    if: always()
+    needs:
+      - success
+      - failure
+      - skipped
+    steps:
+      - uses: actions/github-script@v7
+        script: |
+          console.log(context.job.needs);
