@@ -34,14 +34,12 @@ jobs:
       - failure
       - skipped
     steps:
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            results = [
-              ${{ needs.success.result }},
-              ${{ needs.failure.result }},
-              ${{ needs.skipped.result }}
-            ]
-            for (let result of results) {
-              console.log(result);
-            }
+      - run: |
+          results=( \
+            ${{ needs.success.result }} \
+            ${{ needs.failure.result }} \
+            ${{ needs.skipped.result }} \
+          )
+          for i in "${!results[@]}"; do
+              echo "${jobResults[$i]}"
+          done
