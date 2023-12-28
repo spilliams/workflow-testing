@@ -37,7 +37,11 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            console.log(context);
-            console.log(context.job);
-            console.log(context.action);
-            console.log(context.payload);
+            results = [
+              ${{ needs.success.result }},
+              ${{ needs.failure.result }},
+              ${{ needs.skipped.result }}
+            ]
+            for (let result of results) {
+              console.log(result);
+            }
