@@ -3,6 +3,8 @@ name: "Needs Loop"
 
 on:
   workflow_dispatch:
+  push:
+    branches: main
 
 defaults:
   run:
