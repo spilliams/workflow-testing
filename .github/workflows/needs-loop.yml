@@ -13,33 +13,33 @@ defaults:
 permissions: read-all
 
 jobs:
-  success:
+  a:
     runs-on: ubuntu-20.04
     steps:
       - run: exit 0
-  failure:
+  b:
     runs-on: ubuntu-20.04
     steps:
       - run: exit 1
-  skipped:
+  c:
     runs-on: ubuntu-20.04
     if: false
     steps:
       - uses: actions/checkout@v4
-  loop:
+  d:
     runs-on: ubuntu-20.04
     if: always()
     needs:
-      - success
-      - failure
-      - skipped
+      - a
+      - b
+      - c
     steps:
       - run: |
           results=( \
-            ${{ needs.success.result }} \
-            ${{ needs.failure.result }} \
-            ${{ needs.skipped.result }} \
+            ${{ needs.a.result }} \
+            ${{ needs.b.result }} \
+            ${{ needs.c.result }} \
           )
           for i in "${!results[@]}"; do
-              echo "${jobResults[$i]}"
+              echo "${results[$i]}"
           done
