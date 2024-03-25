@@ -44,7 +44,7 @@ jobs:
       # count-gold-510: ${{ steps.build-gold-510-matrix.outputs.count }}
       count: ${{ steps.count.outputs.count }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # get the whole repo, not just the last commit, so
           # we can compare changes on this branch to main
@@ -137,7 +137,7 @@ jobs:
       #   run: |
       #     # useful if this job runs in a container
       #     # git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          
+
       #     echo "status:"
       #     git status
       #     echo "branches:"
@@ -156,7 +156,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download plan results
         uses: actions/download-artifact@v3
         with:
