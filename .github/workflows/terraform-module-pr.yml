@@ -1,0 +1,28 @@
+---
+name: "Terraform Module PR"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  example:
+    name: "Example"
+    uses: ./.github/workflows/reusable-terraform-module-changelog.yml
+    permissions:
+      contents: read
+    with:
+      compare_from: HEAD
+      compare_to: origin/main
+      dry_run: true
+    secrets: inherit
