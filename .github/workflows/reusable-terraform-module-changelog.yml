@@ -1,0 +1,48 @@
+---
+name: Terraform Module Changelog Comparison
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  workflow_call:
+    inputs:
+      compare_from:
+        type: string
+        description: a git reference to compare from for determining changelog changes
+        default: HEAD
+      compare_to:
+        type: string
+        description: a git reference to compare to for determining changelog changes
+        default: origin/main
+      dry_run:
+        type: boolean
+        default: true
+
+jobs:
+  diff:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          # get the whole repo, not just the last commit, so
+          # we can compare changes on this branch to main
+          fetch-depth: 0
+      - name: "Diff Changelogs"
+        run: |
+          # in PR's case we will want git diff HEAD..origin/main
+          # and in merge's case we will want git diff HEAD..HEAD^
+          diff=$(git diff ${{inputs.compare_from}}..${{ inputs.compare_to }} --name-only --diff-filter ACMR)
+
+          # loop over the files changed in this PR
+          for file in "${diff[@]}"; do
+            echo "$file"
+          fi
+          # if the file isn't named CHANGELOG.md, continue
+          # if it's not in a folder with a module.json, continue
+          # (at this point, we have a CHANGELOG.md file that has been changed in this PR that is in a folder with a module.json file)
+          # read the headings of the file.
+          # read the previous headings of the file.
+          # if there is a new h2 heading, that will be a release.
