@@ -39,7 +39,7 @@ jobs:
           # loop over the files changed in this PR
           for file in "${diff[@]}"; do
             echo "$file"
-          fi
+          done
           # if the file isn't named CHANGELOG.md, continue
           # if it's not in a folder with a module.json, continue
           # (at this point, we have a CHANGELOG.md file that has been changed in this PR that is in a folder with a module.json file)
