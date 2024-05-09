@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   touch-file:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: "Example"
     steps:
       - name: "Make some files"
@@ -50,7 +50,7 @@ jobs:
       #     retention-days: 1
   post-plans:
     name: Post Plan Results
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: always()
     needs: touch-file
     steps:

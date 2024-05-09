@@ -1,12 +1,11 @@
 ---
 name: "Generate Links"
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   make-links:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - run: |
           echo "github.action: ${{ github.action }}"
