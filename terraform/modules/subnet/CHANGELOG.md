@@ -1,4 +1,4 @@
-# VPC module
+# Subnet module
 
 ## 1.0.0
 
