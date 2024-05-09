@@ -67,6 +67,13 @@ jobs:
       matrix:
         tag: ${{ fromJson(needs.diff.outputs.diff) }}
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Checkout From
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.compare_to }}
       - run: |
           set -ex
           echo "tagging and releasing this:"
