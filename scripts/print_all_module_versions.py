@@ -4,7 +4,7 @@ import pathlib
 import re
 
 
-class Module(object):
+class Module:
     def __init__(self, file):
         self.parent = file.parent
 
@@ -26,11 +26,11 @@ class Module(object):
         return f'{self.name} ({self.provider}): {', '.join(self.changelog.versions())}'
 
 
-class MarkdownFile(object):
+class MarkdownFile:
     def __init__(self, file):
         self.headings = []
         lines = []
-        with open(file, 'r') as f:
+        with open(file, 'r', encoding='utf8') as f:
             lines = f.readlines()
 
         currentLevel = 0
@@ -51,11 +51,11 @@ class MarkdownFile(object):
         self.headings.append({"name": currentName, "level": currentLevel, "contents": "".join(contents)})
 
     @classmethod
-    def heading_level(self, line):
+    def heading_level(cls, line):
         heading = re.compile(r"(#*) (.+)")
         match = heading.match(line)
-        if match is None:
-            return 0,""
+        if (match := heading.match(line)) is None:
+            return 0, ""
         return len(match.groups()[0]), match.groups()[1]
 
 
@@ -87,12 +87,12 @@ def main():
     print(json.dumps(releases))
 
 
-# recursively walks `dir` and returns a list of Paths
-def walkdir(dir):
+# recursively walks `d` and returns a list of Paths
+def walkdir(d):
     paths = []
-    for cur, _, files in os.walk(dir):
+    for cur, _, files in os.walk(d):
         for file in files:
-            paths.append(pathlib.Path(os.path.join(cur,file)))
+            paths.append(pathlib.Path(os.path.join(cur, file)))
     return paths
 
 

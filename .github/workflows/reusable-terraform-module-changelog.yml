@@ -9,12 +9,12 @@ on:
   workflow_call:
     inputs:
       compare_from:
-        type: string
         description: a git reference to compare from for determining changelog changes
+        type: string
         default: main
       compare_to:
-        type: string
         description: a git reference to compare to for determining changelog changes
+        type: string
         default: HEAD
       dry_run:
         type: boolean

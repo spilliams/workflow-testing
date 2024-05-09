@@ -25,4 +25,4 @@ jobs:
       compare_to: ${{ github.head_ref }}
       dry_run: true
       release_module_versions: true
-    secrets: inherit
+    secrets: inherit # pragma: allowlist secret

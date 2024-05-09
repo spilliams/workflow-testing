@@ -2,9 +2,10 @@
 name: "Needs Loop"
 
 on:
-  workflow_dispatch:
   push:
-    branches: main
+    branches:
+      - main
+  workflow_dispatch:
 
 defaults:
   run:

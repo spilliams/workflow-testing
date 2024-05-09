@@ -26,4 +26,4 @@ jobs:
       compare_to: ${{ inputs.compare_to }}
       dry_run: true
       release_module_versions: true
-    secrets: inherit
+    secrets: inherit # pragma: allowlist secret
