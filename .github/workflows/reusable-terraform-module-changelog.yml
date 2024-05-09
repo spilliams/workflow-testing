@@ -57,7 +57,6 @@ jobs:
           echo "New versions detected:" >> $GITHUB_STEP_SUMMARY
           DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq '.after - .before')
           echo "$DIFF" >> $GITHUB_STEP_SUMMARY
-          echo "$DIFF" >> $GITHUB_OUTPUT
   tag_and_release:
     runs-on: ubuntu-22.04
     if: inputs.release_module_versions
