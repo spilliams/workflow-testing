@@ -54,7 +54,7 @@ class MarkdownFile:
     def heading_level(cls, line):
         heading = re.compile(r"(#*) (.+)")
         match = heading.match(line)
-        if (match := heading.match(line)) is None:
+        if match is None:
             return 0, ""
         return len(match.groups()[0]), match.groups()[1]
 
@@ -66,6 +66,12 @@ class ChangelogFile(MarkdownFile):
             if heading['level'] == 2:
                 versions.append(heading['name'])
         return versions
+
+    def contents_for_version(self, version):
+        for heading in self.headings:
+            if heading['level'] == 2 and heading['name'] == version:
+                return heading['contents']
+        return None
 
 
 def main():

@@ -62,7 +62,15 @@ jobs:
     runs-on: ubuntu-22.04
     if: inputs.release_module_versions
     needs: [diff]
+    strategy:
+      fail-fast: false
+      max-parallel: 256
+      matrix:
+        tag: ${{ fromJson(needs.diff.outputs.diff) }}
     steps:
       - run: |
-          echo "tagging and releasing these:"
-          echo "${{ needs.diff.outputs.diff }}"
+          echo "tagging and releasing this:"
+          echo "${{ matrix.tag }}"
+          echo "its contents will be:"
+          CONTENTS=$(scripts/print_version_changelog.py ${{ matrix.tag }})
+          echo "$CONTENTS"
