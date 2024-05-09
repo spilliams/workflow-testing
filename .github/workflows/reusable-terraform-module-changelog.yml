@@ -38,14 +38,14 @@ jobs:
           ref: ${{ inputs.compare_from }}
       - name: List "From" Versions
         id: versions_from
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> $GITHUB_OUTPUT
+        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
       - name: Checkout To
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.compare_to }}
       - name: List "To" Versions
         id: versions_to
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> $GITHUB_OUTPUT
+        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
       - name: Compare Version Lists
         id: compare
         run: |

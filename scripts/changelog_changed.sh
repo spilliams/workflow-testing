@@ -14,6 +14,7 @@ set -eo pipefail
 # It's not terribly smart: it doesn't ensure that the change to the Changelog
 # actually reflects anything about the code changes themselves.
 
+# shellcheck disable=SC2317 # we use unreachable commands to turn off verbose logging
 function log() {
   return 0
   echo "$1"

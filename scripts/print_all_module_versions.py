@@ -25,6 +25,7 @@ class Module(object):
     def __str__(self):
         return f'{self.name} ({self.provider}): {', '.join(self.changelog.versions())}'
 
+
 class MarkdownFile(object):
     def __init__(self, file):
         self.headings = []
@@ -57,6 +58,7 @@ class MarkdownFile(object):
             return 0,""
         return len(match.groups()[0]), match.groups()[1]
 
+
 class ChangelogFile(MarkdownFile):
     def versions(self):
         versions = []
@@ -64,6 +66,7 @@ class ChangelogFile(MarkdownFile):
             if heading['level'] == 2:
                 versions.append(heading['name'])
         return versions
+
 
 def main():
     # list all files in the modules directory
@@ -91,6 +94,7 @@ def walkdir(dir):
         for file in files:
             paths.append(pathlib.Path(os.path.join(cur,file)))
     return paths
+
 
 if __name__ == "__main__":
     main()
