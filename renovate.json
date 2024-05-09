@@ -24,5 +24,15 @@
   },
   "schedule": ["before 3am on Monday"],
   "separateMajorMinor": true,
-  "timezone": "America/Los_Angeles"
+  "timezone": "America/Los_Angeles",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [".github/.*/.*.ya?ml"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: (lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[a-z-0-9]+?))?\\s.+?version: \"?(?<currentValue>.+?)\"?\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver-coerced{{/if}}"
+    }
+  ]
 }

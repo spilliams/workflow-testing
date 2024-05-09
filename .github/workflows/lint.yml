@@ -1,0 +1,58 @@
+---
+name: "Lint"
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow-dispatch:
+
+permissions: read-all
+
+jobs:
+  pre-commit:
+    name: Run Pre-Commit
+    if: ${{ github.event.pull_request.base.ref != 'main' && !startsWith(github.event.pull_request.head.ref, 'create-pull-request/') }}
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: precommit:${{github.ref}}
+      cancel-in-progress: true
+    steps:
+      - name: Install terraform-docs
+        run: |
+          mkdir terraform-docs
+          cd terraform-docs
+
+          curl -Lo "./terraform-docs.tar.gz" "https://github.com/terraform-docs/terraform-docs/releases/download/v0.17.0/terraform-docs-v0.17.0-$(uname)-amd64.tar.gz"
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+          mv terraform-docs /usr/local/bin/terraform-docs
+
+          cd ..
+          rm -rf terraform-docs/
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # renovate: datasource=docker depName=python
+          python-version: "3.12"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          # renovate: datasource=github-releases depName=hashicorp/terraform versioning=hashicorp
+          terraform_version: "1.8.2"
+          terraform_wrapper: false
+
+      - uses: pre-commit/action@v3.0.1
+
+      - name: Check Logs
+        if: always()
+        run: |
+          pre-commit --version
+          cat /usr/local/pre-commit/cache/pre-commit.log || true
