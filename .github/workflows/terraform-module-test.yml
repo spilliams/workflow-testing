@@ -1,0 +1,27 @@
+---
+name: "Terraform Module Test"
+
+on:
+  workflow_dispatch:
+    inputs:
+      compare_from:
+        type: string
+      compare_to:
+        type: string
+        default: origin/main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  example:
+    name: "Example"
+    uses: ./.github/workflows/reusable-terraform-module-changelog.yml
+    permissions:
+      contents: read
+    with:
+      compare_from: ${{ inputs.compare_from }}
+      compare_to: ${{ inputs.compare_to }}
+      dry_run: true
+    secrets: inherit
