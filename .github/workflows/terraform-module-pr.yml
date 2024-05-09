@@ -23,4 +23,6 @@ jobs:
     with:
       compare_from: ${{ github.base_ref }}
       compare_to: ${{ github.head_ref }}
+      dry_run: true
+      release_module_versions: true
     secrets: inherit

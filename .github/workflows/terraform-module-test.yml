@@ -25,4 +25,5 @@ jobs:
       compare_from: ${{ inputs.compare_from }}
       compare_to: ${{ inputs.compare_to }}
       dry_run: true
+      release_module_versions: true
     secrets: inherit

@@ -16,6 +16,9 @@ on:
         type: string
         description: a git reference to compare to for determining changelog changes
         default: HEAD
+      dry_run:
+        type: boolean
+        default: false
       release_module_versions:
         type: boolean
         default: false
@@ -23,6 +26,8 @@ on:
 jobs:
   diff:
     runs-on: ubuntu-22.04
+    outputs:
+      diff: ${{ steps.compare.outputs.diff }}
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -42,10 +47,21 @@ jobs:
         id: versions_to
         run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> $GITHUB_OUTPUT
       - name: Compare Version Lists
+        id: compare
         run: |
           echo "Module Versions at ${{ inputs.compare_from }}:"
           echo "${{ steps.versions_from.outputs.versions }}"
           echo "Module Versions at ${{ inputs.compare_to }}:"
           echo "${{ steps.versions_to.outputs.versions }}"
           echo "New versions detected:" >> "$GITHUB_STEP_SUMMARY"
-          echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq '.after - .before' >> "$GITHUB_STEP_SUMMARY"
+          DIFF='{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq '.after - .before'
+          echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
+          echo "$DIFF" >> "$GITHUB_OUTPUT"
+  tag_and_release:
+    runs-on: ubuntu-22.04
+    if: inputs.release_module_versions
+    needs: [diff]
+    steps:
+      - run: |
+          echo "tagging and releasing these:"
+          echo "${{ needs.diff.outputs.diff }}"
