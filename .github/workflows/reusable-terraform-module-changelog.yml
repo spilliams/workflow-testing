@@ -16,9 +16,9 @@ on:
         type: string
         description: a git reference to compare to for determining changelog changes
         default: HEAD
-      dry_run:
+      release_module_versions:
         type: boolean
-        default: true
+        default: false
 
 jobs:
   diff:
