@@ -49,6 +49,7 @@ jobs:
       - name: Compare Version Lists
         id: compare
         run: |
+          set -ex
           echo "Module Versions at ${{ inputs.compare_from }}:"
           echo "${{ steps.versions_from.outputs.versions }}"
           echo "Module Versions at ${{ inputs.compare_to }}:"
