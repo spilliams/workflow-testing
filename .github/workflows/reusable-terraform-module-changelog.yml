@@ -11,11 +11,11 @@ on:
       compare_from:
         type: string
         description: a git reference to compare from for determining changelog changes
-        default: HEAD
+        default: main
       compare_to:
         type: string
         description: a git reference to compare to for determining changelog changes
-        default: origin/main
+        default: HEAD
       dry_run:
         type: boolean
         default: true
