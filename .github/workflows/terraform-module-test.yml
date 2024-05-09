@@ -5,9 +5,11 @@ on:
   workflow_dispatch:
     inputs:
       compare_from:
+        description: a git reference to compare from for determining changelog changes
         type: string
         default: main
       compare_to:
+        description: a git reference to compare to for determining changelog changes
         type: string
         default: changelog-detection
 
