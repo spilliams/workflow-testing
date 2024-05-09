@@ -1,9 +1,0 @@
-**/backend.tf
-**/.terragrunt-cache
-**/.terraform
-docs
-stage
-Makefile
-renovate.json
-**/README.md
-.devcontainer.json
