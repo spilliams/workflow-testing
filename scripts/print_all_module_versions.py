@@ -3,12 +3,13 @@ import os
 import pathlib
 import re
 
+
 class Module(object):
     def __init__(self, file):
         self.parent = file.parent
-        
+
         self.manifest = json.loads(file.read_bytes())
-        
+
         changelog = pathlib.Path(os.path.join(file.parent, "CHANGELOG.md"))
         if changelog.exists():
             self.changelog = ChangelogFile(changelog)
