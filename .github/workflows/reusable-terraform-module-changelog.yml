@@ -55,7 +55,7 @@ jobs:
           echo "Module Versions at ${{ inputs.compare_to }}:"
           echo "${{ steps.versions_to.outputs.versions }}"
           echo "New versions detected:" >> "$GITHUB_STEP_SUMMARY"
-          DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq '.after - .before')
+          DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq -c '.after - .before')
           echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
           echo diff="$DIFF" >> "$GITHUB_OUTPUT"
   tag_and_release:
