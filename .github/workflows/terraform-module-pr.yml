@@ -21,6 +21,6 @@ jobs:
     permissions:
       contents: read
     with:
-      compare_from: ${{ github.pull_request.base.ref }}
-      compare_to: ${{ github.pull_request.head.ref }}
+      compare_from: ${{ github.base_ref }}
+      compare_to: ${{ github.head_ref }}
     secrets: inherit
