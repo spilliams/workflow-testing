@@ -47,3 +47,5 @@ jobs:
           echo "${{ steps.versions_from.outputs.versions }}"
           echo "Module Versions at ${{ inputs.compare_to }}:"
           echo "${{ steps.versions_to.outputs.versions }}"
+          echo "New versions detected:"
+          echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq '.after - .before'
