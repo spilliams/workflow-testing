@@ -102,5 +102,5 @@ jobs:
               repo: "${{ github.repository }}",
               tag_name: "${{ matrix.tag }}",
               name: "${{ matrix.tag }}",
-              body: "${{ steps.fetch_release_contents.outputs.contents }}"
+              body: `${{ steps.fetch_release_contents.outputs.contents }}`
             });
