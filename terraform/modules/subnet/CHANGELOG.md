@@ -1,6 +1,8 @@
 # Subnet module
 
-This module is no longer released under its own name, etc.
+## 2.1.0
+
+An update
 
 ## 2.0.0
 
