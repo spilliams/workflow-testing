@@ -16,9 +16,6 @@ on:
         description: a git reference to compare to for determining changelog changes
         type: string
         default: HEAD
-      dry_run:
-        type: boolean
-        default: false
       release_module_versions:
         type: boolean
         default: false
@@ -83,7 +80,6 @@ jobs:
           } >> "$GITHUB_OUTPUT"
       - name: Create Tag
         uses: actions/github-script@v7
-        if: ${{ ! inputs.dry_run }}
         with:
           script: |
             octokit.rest.repos.createTag({
@@ -98,7 +94,6 @@ jobs:
             });
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: ${{ ! inputs.dry_run }}
         with:
           tag_name: ${{ matrix.tag }}
           body: ${{ steps.fetch_release_contents.outputs.contents }}
