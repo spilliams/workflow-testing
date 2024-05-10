@@ -80,3 +80,8 @@ jobs:
           echo "its contents will be:"
           CONTENTS=$(python3 scripts/print_version_changelog.py ${{ matrix.tag }})
           echo "$CONTENTS"
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git tag -a -m "$CONTENTS" ${{ matrix.tag }}
