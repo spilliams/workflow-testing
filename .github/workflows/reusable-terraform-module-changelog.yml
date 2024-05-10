@@ -89,8 +89,10 @@ jobs:
               message: `${{ steps.fetch_release_contents.outputs.contents }}`,
               object: "${{ github.sha }}",
               type: "commit",
-              tagger.name: "GitHub Actions",
-              tagger.email: "actions@github.com"
+              tagger: {
+                name: "GitHub Actions",
+                email: "actions@github.com"
+              }
             });
       - name: Create Release
         uses: softprops/action-gh-release@v2
