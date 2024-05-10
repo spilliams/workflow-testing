@@ -23,5 +23,5 @@ jobs:
     with:
       compare_from: ${{ github.base_ref }}
       compare_to: ${{ github.head_ref }}
-      release_module_versions: true
+      release_module_versions: false
     secrets: inherit # pragma: allowlist secret
