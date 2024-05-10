@@ -9,7 +9,7 @@ on:
   push:
     branches-ignore:
       - main
-  workflow-dispatch:
+  workflow_dispatch:
 
 permissions: read-all
 

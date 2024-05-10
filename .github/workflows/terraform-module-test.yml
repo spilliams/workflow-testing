@@ -5,10 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       compare_from:
+        description: a git reference to compare from for determining changelog changes
         type: string
+        default: main
       compare_to:
+        description: a git reference to compare to for determining changelog changes
         type: string
-        default: origin/main
+        default: changelog-detection
 
 defaults:
   run:
@@ -24,4 +27,5 @@ jobs:
       compare_from: ${{ inputs.compare_from }}
       compare_to: ${{ inputs.compare_to }}
       dry_run: true
-    secrets: inherit
+      release_module_versions: true
+    secrets: inherit # pragma: allowlist secret

@@ -9,20 +9,25 @@ on:
   workflow_call:
     inputs:
       compare_from:
-        type: string
         description: a git reference to compare from for determining changelog changes
-        default: HEAD
-      compare_to:
         type: string
+        default: main
+      compare_to:
         description: a git reference to compare to for determining changelog changes
-        default: origin/main
+        type: string
+        default: HEAD
       dry_run:
         type: boolean
-        default: true
+        default: false
+      release_module_versions:
+        type: boolean
+        default: false
 
 jobs:
   diff:
     runs-on: ubuntu-22.04
+    outputs:
+      diff: ${{ steps.compare.outputs.diff }}
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -33,17 +38,69 @@ jobs:
           ref: ${{ inputs.compare_from }}
       - name: List "From" Versions
         id: versions_from
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> $GITHUB_OUTPUT
+        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
       - name: Checkout To
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.compare_to }}
       - name: List "To" Versions
         id: versions_to
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> $GITHUB_OUTPUT
+        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
       - name: Compare Version Lists
+        id: compare
         run: |
           echo "Module Versions at ${{ inputs.compare_from }}:"
           echo "${{ steps.versions_from.outputs.versions }}"
           echo "Module Versions at ${{ inputs.compare_to }}:"
           echo "${{ steps.versions_to.outputs.versions }}"
+          echo "New versions detected:" >> "$GITHUB_STEP_SUMMARY"
+          DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq -c '.after - .before')
+          echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
+          echo diff="$DIFF" >> "$GITHUB_OUTPUT"
+  tag_and_release:
+    runs-on: ubuntu-22.04
+    if: inputs.release_module_versions
+    needs: [diff]
+    strategy:
+      fail-fast: false
+      max-parallel: 256
+      matrix:
+        tag: ${{ fromJson(needs.diff.outputs.diff) }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Checkout From
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.compare_to }}
+      - name: Fetch Release Contents
+        id: fetch_release_contents
+        run: |
+          CONTENTS=$(python3 scripts/print_version_changelog.py ${{ matrix.tag }})
+          {
+            echo "contents<<EOF" ;
+            echo "$CONTENTS" ;
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Create Tag
+        uses: actions/github-script@v7
+        if: ${{ ! inputs.dry_run }}
+        with:
+          script: |
+            octokit.rest.repos.createTag({
+              owner: "${{ github.repository_owner }}",
+              repo: "${{ github.repository }}",
+              tag: "${{ matrix.tag }}",
+              message: "${{ steps.fetch_release_contents.outputs.contents }}"
+              object: "${{ github.sha }}",
+              type: "commit",
+              tagger.name: "GitHub Actions",
+              tagger.email: "actions@github.com"
+            });
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ ! inputs.dry_run }}
+        with:
+          tag_name: ${{ matrix.tag }}
+          body: ${{ steps.fetch_release_contents.outputs.contents }}

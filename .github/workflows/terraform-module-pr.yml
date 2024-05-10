@@ -9,7 +9,6 @@ on:
       - reopened
     branches:
       - main
-  workflow_dispatch:
 
 defaults:
   run:
@@ -22,7 +21,8 @@ jobs:
     permissions:
       contents: read
     with:
-      compare_from: HEAD
-      compare_to: origin/main
+      compare_from: ${{ github.base_ref }}
+      compare_to: ${{ github.head_ref }}
       dry_run: true
-    secrets: inherit
+      release_module_versions: true
+    secrets: inherit # pragma: allowlist secret
