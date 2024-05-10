@@ -25,7 +25,7 @@ jobs:
     name: "Example"
     uses: ./.github/workflows/reusable-terraform-module-changelog.yml
     permissions:
-      contents: read
+      contents: write
     with:
       compare_from: ${{ inputs.compare_from }}
       compare_to: ${{ inputs.compare_to }}
