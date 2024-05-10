@@ -78,7 +78,11 @@ jobs:
         id: fetch_release_contents
         run: |
           CONTENTS=$(python3 scripts/print_version_changelog.py ${{ matrix.tag }})
-          echo "contents=$CONTENTS" >> "$GITHUB_OUTPUT"
+          {
+            echo "contents<<EOF" ;
+            echo "$CONTENTS" ;
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
       - uses: actions/github-script@v7
         if: ${{ inputs.dry_run }}
         with:
