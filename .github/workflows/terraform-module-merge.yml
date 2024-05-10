@@ -1,5 +1,5 @@
 ---
-name: "Terraform Module PR"
+name: "Terraform Module PR Merged"
 
 on:
   push:
