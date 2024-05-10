@@ -32,24 +32,22 @@ jobs:
           python-version: "3.12"
       - uses: actions/checkout@v4
         with:
+          # so we can checkout any reference or relative
           fetch-depth: 0
-      - run: git checkout ${{ inputs.compare_from }}
-      - name: List "From" Versions
-        id: versions_from
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
-      - run: git checkout ${{ inputs.compare_to }}
-      - name: List "To" Versions
-        id: versions_to
-        run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
-      - name: Compare Version Lists
+      - name: Compare Module Versions
         id: compare
         run: |
+          git checkout ${{ inputs.compare_from }}
+          VERSIONS_FROM="$(python3 scripts/print_all_module_versions.py)"
+          git checkout ${{ inputs.compare_to }}
+          VERSIONS_TO="$(python3 scripts/print_all_module_versions.py)"
+
           echo "Module Versions at ${{ inputs.compare_from }}:"
-          echo "${{ steps.versions_from.outputs.versions }}"
+          echo "$VERSIONS_FROM"
           echo "Module Versions at ${{ inputs.compare_to }}:"
-          echo "${{ steps.versions_to.outputs.versions }}"
+          echo "$VERSIONS_TO"
           echo "New versions detected:" >> "$GITHUB_STEP_SUMMARY"
-          DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq -c '.after - .before')
+          DIFF=$(echo "{'before': $VERSIONS_FROM, 'after': $VERSIONS_TO}" | jq -c '.after - .before')
           echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
           echo diff="$DIFF" >> "$GITHUB_OUTPUT"
           echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
@@ -79,6 +77,9 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
       - run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           git tag "${{ matrix.tag }}"
           git push --tags
       - name: Create Release
