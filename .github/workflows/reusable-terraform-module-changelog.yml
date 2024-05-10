@@ -55,7 +55,7 @@ jobs:
           echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
   tag_and_release:
     runs-on: ubuntu-22.04
-    if: inputs.release_module_versions && needs.diff.outputs.count > 0
+    # if: inputs.release_module_versions && needs.diff.outputs.count > 0
     needs: [diff]
     strategy:
       fail-fast: false
@@ -82,18 +82,19 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.repos.createTag({
-              owner: "${{ github.repository_owner }}",
-              repo: "${{ github.repository }}",
-              tag: "${{ matrix.tag }}",
-              message: `${{ steps.fetch_release_contents.outputs.contents }}`,
-              object: "${{ github.sha }}",
-              type: "commit"
-            });
-            github.rest.repos.createRelease({
-              owner: "${{ github.repository_owner }}",
-              repo: "${{ github.repository }}",
-              tag_name: "${{ matrix.tag }}",
-              name: "${{ matrix.tag }}",
-              body: `${{ steps.fetch_release_contents.outputs.contents }}`
-            });
+            console.log(github.rest.repos);
+            # github.rest.repos.createTag({
+            #   owner: "${{ github.repository_owner }}",
+            #   repo: "${{ github.repository }}",
+            #   tag: "${{ matrix.tag }}",
+            #   message: `${{ steps.fetch_release_contents.outputs.contents }}`,
+            #   object: "${{ github.sha }}",
+            #   type: "commit"
+            # });
+            # github.rest.repos.createRelease({
+            #   owner: "${{ github.repository_owner }}",
+            #   repo: "${{ github.repository }}",
+            #   tag_name: "${{ matrix.tag }}",
+            #   name: "${{ matrix.tag }}",
+            #   body: `${{ steps.fetch_release_contents.outputs.contents }}`
+            # });
