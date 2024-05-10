@@ -55,7 +55,7 @@ jobs:
           echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
   tag_and_release:
     runs-on: ubuntu-22.04
-    # if: inputs.release_module_versions && needs.diff.outputs.count > 0
+    if: inputs.release_module_versions && needs.diff.outputs.count > 0
     needs: [diff]
     strategy:
       fail-fast: false
@@ -82,10 +82,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log(github)
-            console.log(github.repos)
-            console.log(github.repos.createTag)
-            github.repos.createTag({
+            github.rest.repos.createTag({
               owner: "${{ github.repository_owner }}",
               repo: "${{ github.repository }}",
               tag: "${{ matrix.tag }}",
@@ -93,8 +90,10 @@ jobs:
               object: "${{ github.sha }}",
               type: "commit"
             });
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ matrix.tag }}
-          body: ${{ steps.fetch_release_contents.outputs.contents }}
+            github.rest.repos.createRelease({
+              owner: "${{ github.repository_owner }}",
+              repo: "${{ github.repository }}",
+              tag_name: "${{ matrix.tag }}",
+              name: "${{ matrix.tag }}",
+              body: `${{ steps.fetch_release_contents.outputs.contents }}`
+            });
