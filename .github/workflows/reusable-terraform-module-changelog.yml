@@ -75,9 +75,8 @@ jobs:
         with:
           ref: ${{ inputs.compare_to }}
       - run: |
-          set -ex
           echo "tagging and releasing this:"
           echo "${{ matrix.tag }}"
           echo "its contents will be:"
-          CONTENTS=$(scripts/print_version_changelog.py ${{ matrix.tag }})
+          CONTENTS=$(python3 scripts/print_version_changelog.py ${{ matrix.tag }})
           echo "$CONTENTS"
