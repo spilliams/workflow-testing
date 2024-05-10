@@ -48,7 +48,7 @@ jobs:
           echo "Module Versions at ${{ inputs.compare_to }}:"
           echo "$VERSIONS_TO"
           echo "New versions detected:" >> "$GITHUB_STEP_SUMMARY"
-          DIFF=$(echo "{'before': $VERSIONS_FROM, 'after': $VERSIONS_TO}" | jq -c '.after - .before')
+          DIFF=$(echo "{\"before\": $VERSIONS_FROM, \"after\": $VERSIONS_TO}" | jq -c '.after - .before')
           echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
           echo diff="$DIFF" >> "$GITHUB_OUTPUT"
           echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
