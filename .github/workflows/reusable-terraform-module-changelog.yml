@@ -78,16 +78,9 @@ jobs:
             echo "$CONTENTS" ;
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-      - name: Create Tag
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/${{ matrix.tag }}",
-              sha: context.sha
-            });
+      - run: |
+          git tag "${{ matrix.tag }}"
+          git push --tags
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
