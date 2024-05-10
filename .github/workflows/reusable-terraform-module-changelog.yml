@@ -32,17 +32,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Checkout From
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.compare_from }}
+          fetch-depth: 0
+      - run: git checkout ${{ inputs.compare_from }}
       - name: List "From" Versions
         id: versions_from
         run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
-      - name: Checkout To
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.compare_to }}
+      - run: git checkout ${{ inputs.compare_to }}
       - name: List "To" Versions
         id: versions_to
         run: echo "versions=$(python3 scripts/print_all_module_versions.py)" >> "$GITHUB_OUTPUT"
@@ -70,8 +67,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Checkout From
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.compare_to }}
       - name: Fetch Release Contents
