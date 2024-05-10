@@ -83,7 +83,9 @@ jobs:
             echo "$CONTENTS" ;
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-      - uses: actions/github-script@v7
+      - name: Create Tag
+        uses: actions/github-script@v7
+        if: ${{ ! inputs.dry_run }}
         with:
           script: |
             octokit.rest.repos.createTag({
@@ -96,10 +98,9 @@ jobs:
               tagger.name: "GitHub Actions",
               tagger.email: "actions@github.com"
             });
-            octokit.rest.repos.createRelease({
-              owner: "${{ github.repository_owner }}",
-              repo: "${{ github.repository }}",
-              tag_name: "${{ matrix.tag }}",
-              name: "${{ matrix.tag }}",
-              body: `${{ steps.fetch_release_contents.outputs.contents }}`
-            });
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ ! inputs.dry_run }}
+        with:
+          tag_name: ${{ matrix.tag }}
+          body: ${{ steps.fetch_release_contents.outputs.contents }}
