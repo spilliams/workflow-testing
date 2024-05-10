@@ -88,3 +88,18 @@ jobs:
             console.log(github.rest)
             console.log("github.rest.repos:")
             console.log(github.rest.repos)
+            # github.rest.repos.createTag({
+            #   owner: "${{ github.repository_owner }}",
+            #   repo: "${{ github.repository }}",
+            #   tag: "${{ matrix.tag }}",
+            #   message: `${{ steps.fetch_release_contents.outputs.contents }}`,
+            #   object: "${{ github.sha }}",
+            #   type: "commit"
+            # });
+            # github.rest.repos.createRelease({
+            #   owner: "${{ github.repository_owner }}",
+            #   repo: "${{ github.repository }}",
+            #   tag_name: "${{ matrix.tag }}",
+            #   name: "${{ matrix.tag }}",
+            #   body: `${{ steps.fetch_release_contents.outputs.contents }}`
+            # });
