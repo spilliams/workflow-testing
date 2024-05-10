@@ -7,11 +7,10 @@ on:
       compare_from:
         description: a git reference to compare from for determining changelog changes
         type: string
-        default: main
       compare_to:
         description: a git reference to compare to for determining changelog changes
         type: string
-        default: changelog-detection
+        default: main
       release_module_versions:
         description: whether to tag and release the module version(s)
         type: boolean
