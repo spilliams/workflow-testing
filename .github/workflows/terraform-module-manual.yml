@@ -5,14 +5,14 @@ on:
   workflow_dispatch:
     inputs:
       compare_from:
-        description: a git reference to compare from for determining changelog changes
+        description: a git ref to compare _from_ for determining module versions
         type: string
       compare_to:
-        description: a git reference to compare to for determining changelog changes
+        description: a git ref to compare _to_ for determining module versions
         type: string
         default: main
       release_module_versions:
-        description: whether to tag and release the module version(s)
+        description: tag and release the module version(s)?
         type: boolean
         default: false
 
