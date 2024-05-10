@@ -37,6 +37,7 @@ jobs:
       - name: Compare Module Versions
         id: compare
         run: |
+          set -ex
           git checkout ${{ inputs.compare_from }}
           VERSIONS_FROM="$(python3 scripts/print_all_module_versions.py)"
           git checkout ${{ inputs.compare_to }}
