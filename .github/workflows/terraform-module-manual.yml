@@ -1,5 +1,5 @@
 ---
-name: "Terraform Module Test"
+name: "Terraform Module Release"
 
 on:
   workflow_dispatch:
@@ -12,6 +12,10 @@ on:
         description: a git reference to compare to for determining changelog changes
         type: string
         default: changelog-detection
+      release_module_versions:
+        description: whether to tag and release the module version(s)
+        type: boolean
+        default: false
 
 defaults:
   run:
@@ -26,6 +30,5 @@ jobs:
     with:
       compare_from: ${{ inputs.compare_from }}
       compare_to: ${{ inputs.compare_to }}
-      dry_run: true
-      release_module_versions: true
+      release_module_versions: ${{ inputs.release_module_versions }}
     secrets: inherit # pragma: allowlist secret
