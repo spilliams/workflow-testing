@@ -27,6 +27,7 @@ jobs:
   diff:
     runs-on: ubuntu-22.04
     outputs:
+      count: ${{ steps.compare.outputs.count }}
       diff: ${{ steps.compare.outputs.diff }}
     steps:
       - uses: actions/setup-python@v5
@@ -54,9 +55,10 @@ jobs:
           DIFF=$(echo '{"before": ${{ steps.versions_from.outputs.versions }}, "after": ${{ steps.versions_to.outputs.versions }}}' | jq -c '.after - .before')
           echo "$DIFF" >> "$GITHUB_STEP_SUMMARY"
           echo diff="$DIFF" >> "$GITHUB_OUTPUT"
+          echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
   tag_and_release:
     runs-on: ubuntu-22.04
-    if: inputs.release_module_versions
+    if: inputs.release_module_versions && needs.diff.outputs.count > 0
     needs: [diff]
     strategy:
       fail-fast: false
