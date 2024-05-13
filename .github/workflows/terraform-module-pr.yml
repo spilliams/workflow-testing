@@ -25,4 +25,4 @@ jobs:
       compare_to: ${{ github.head_ref }}
       release_module_versions: false
     secrets:
-      token: ${{ secrets.TAG_RELEASE_PAT }}
+      PAT_WORKFLOW_WRITE: ${{ secrets.TAG_RELEASE_PAT }}

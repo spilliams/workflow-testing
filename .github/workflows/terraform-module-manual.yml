@@ -32,4 +32,4 @@ jobs:
       compare_to: ${{ inputs.compare_to }}
       release_module_versions: ${{ inputs.release_module_versions }}
     secrets:
-      token: ${{ secrets.TAG_RELEASE_PAT }}
+      PAT_WORKFLOW_WRITE: ${{ secrets.TAG_RELEASE_PAT }}

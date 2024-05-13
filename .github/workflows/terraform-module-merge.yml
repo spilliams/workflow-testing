@@ -22,4 +22,4 @@ jobs:
       compare_to: main
       release_module_versions: true
     secrets:
-      token: ${{ secrets.TAG_RELEASE_PAT }}
+      PAT_WORKFLOW_WRITE: ${{ secrets.TAG_RELEASE_PAT }}
