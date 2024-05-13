@@ -83,10 +83,8 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
           {
-            echo "<<EOF" ;
             echo "The release notes for ${{ matrix.tag }} will be:" ;
             echo "$CONTENTS" ;
-            echo "EOF"
           } >> "$GITHUB_STEP_SUMMARY"
       - if: ${{ inputs.release_module_versions }}
         run: |
