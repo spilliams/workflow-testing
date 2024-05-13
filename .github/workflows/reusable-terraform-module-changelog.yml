@@ -58,7 +58,7 @@ jobs:
           echo count="$(echo "$DIFF" | jq 'length')" >> "$GITHUB_OUTPUT"
   tag_and_release:
     runs-on: ubuntu-22.04
-    if: inputs.release_module_versions && needs.diff.outputs.count > 0
+    if: needs.diff.outputs.count > 0
     needs: [diff]
     strategy:
       fail-fast: false
@@ -73,7 +73,7 @@ jobs:
         with:
           ref: ${{ inputs.compare_to }}
           token: ${{ secrets.PAT_WORKFLOW_WRITE }}
-      - name: Fetch Release Contents
+      - name: Preview Release Contents
         id: fetch_release_contents
         run: |
           CONTENTS=$(python3 scripts/print_version_changelog.py ${{ matrix.tag }})
@@ -82,13 +82,21 @@ jobs:
             echo "$CONTENTS" ;
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-      - run: |
+          {
+            echo "<<EOF" ;
+            echo "The release notes for ${{ matrix.tag }} will be:" ;
+            echo "$CONTENTS" ;
+            echo "EOF"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - if: ${{ inputs.release_module_versions }}
+        run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git tag "${{ matrix.tag }}"
           git push --tags
       - name: Create Release
+        if: ${{ inputs.release_module_versions }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ matrix.tag }}
