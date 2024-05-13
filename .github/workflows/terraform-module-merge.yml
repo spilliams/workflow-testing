@@ -21,4 +21,5 @@ jobs:
       compare_from: main^
       compare_to: main
       release_module_versions: true
-    secrets: inherit # pragma: allowlist secret
+    secrets:
+      PAT_WORKFLOW_WRITE: ${{ secrets.TAG_RELEASE_PAT }}
