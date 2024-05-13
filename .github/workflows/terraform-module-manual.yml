@@ -7,11 +7,11 @@ on:
       compare_from:
         description: a git ref to compare _from_ for determining module versions
         type: string
-        default: 4e9255afee288cf689c09026234bb624ab993bd3 # pragma: allowlist secret
+        default: 432a0f95b4e490aced7656d48ae868e614834770 # pragma: allowlist secret
       compare_to:
         description: a git ref to compare _to_ for determining module versions
         type: string
-        default: 432a0f95b4e490aced7656d48ae868e614834770 # pragma: allowlist secret
+        default: 2d0c853e17704d15cdb55f2337c28e468ed2f681 # pragma: allowlist secret
       release_module_versions:
         description: tag and release the module version(s)?
         type: boolean
