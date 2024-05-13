@@ -26,10 +26,10 @@ jobs:
     name: "Example"
     uses: ./.github/workflows/reusable-terraform-module-changelog.yml
     permissions:
-      # actions: write
       contents: write
     with:
       compare_from: ${{ inputs.compare_from }}
       compare_to: ${{ inputs.compare_to }}
       release_module_versions: ${{ inputs.release_module_versions }}
-    secrets: inherit # pragma: allowlist secret
+    secrets:
+      token: ${{ secrets.TAG_RELEASE_PAT }}
