@@ -78,9 +78,12 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
       - run: |
+          set -ex
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
+          git status
+          git diff
           git tag "${{ matrix.tag }}"
           git push --tags
       - name: Create Release
