@@ -68,10 +68,20 @@ class ChangelogFile(MarkdownFile):
         return versions
 
     def contents_for_version(self, version):
+        contents = None
+        append = False
+        # heading['contents'] is just the content directly in this heading.
+        # We need to return all subheadings' contents too.
         for heading in self.headings:
+            if append:
+                if heading['level'] <= 2:
+                    return contents
+                contents += f"{'#'*heading['level']} {heading['name']}\n"
+                contents += heading['contents']
             if heading['level'] == 2 and heading['name'] == version:
-                return heading['contents']
-        return None
+                contents = heading['contents']
+                append = True
+        return contents
 
 
 def main():
