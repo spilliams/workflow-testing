@@ -63,6 +63,11 @@ jobs:
         run: |
           cd ${{ env.cwd }}
           echo "terraform version"
+      - name: dry run
+        run: |
+          if [ -z ${DRY_RUN+x} ]; then
+            echo "dry run"
+          fi
       - name: terraform apply
         env:
           cwd: terraform/roots/${{ inputs.root_name }}
