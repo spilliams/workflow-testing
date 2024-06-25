@@ -1,0 +1,93 @@
+---
+name: Terraform Apply
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  workflow_call:
+    inputs:
+      aws_profile:
+        type: string
+      environment:
+        type: string
+      image:
+        description: Full name of the image to use
+        type: string
+        required: true
+      matrix_json:
+        description: A JSON string of a matrix
+        type: string
+      root_name:
+        description: The name of the root folder within terraform/roots/
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+  packages: read
+
+jobs:
+  apply:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      max-parallel: 256
+      matrix: ${{ fromJson(inputs.matrix_json) }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure AWS Credentials
+        run: |
+          mkdir -p ~/.aws
+          cat > ~/.aws/credentials <<EOF
+          [${{ inputs.aws_profile }}]
+          aws_access_key_id = ${{ vars.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          EOF
+      - name: Make sure we can read from Modules, Application repos
+        run: |
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh
+          echo '${{ secrets.ORG_READ_ONLY_SSH_KEY }}' > /root/.ssh/id_rsa
+          ssh-keyscan github.com > /root/.ssh/known_hosts
+          chmod 600 /root/.ssh/id_rsa /root/.ssh/known_hosts
+      - name: terraform version
+        env:
+          cwd: terraform/roots/${{ inputs.root_name }}
+          BOOTSTRAP_ORGANIZATION: ${{ matrix.organization }}
+          BOOTSTRAP_GLOBE: ${{ matrix.globe }}
+          BOOTSTRAP_DOMAIN: ${{ matrix.domain }}
+          BOOTSTRAP_ENVIRONMENT: ${{ matrix.environment }}
+          BOOTSTRAP_REGION: ${{ matrix.region }}
+        run: |
+          cd ${{ env.cwd }}
+          echo "terraform version"
+      - name: terraform apply
+        env:
+          cwd: terraform/roots/${{ inputs.root_name }}
+          BOOTSTRAP_ORGANIZATION: ${{ matrix.organization }}
+          BOOTSTRAP_GLOBE: ${{ matrix.globe }}
+          BOOTSTRAP_DOMAIN: ${{ matrix.domain }}
+          BOOTSTRAP_ENVIRONMENT: ${{ matrix.environment }}
+          BOOTSTRAP_REGION: ${{ matrix.region }}
+        run: |
+          echo "$TF_PLUGIN_CACHE_DIR"
+          tree -L 4 "$TF_PLUGIN_CACHE_DIR"
+          cd ${{ env.cwd }}
+          echo "terraform init"
+          echo "terraform apply -auto-approve"
+      - name: Archive errored tfstate
+        if: always()
+        uses: actions/upload-artifact@v4
+        env:
+          file_suffix: ${{ matrix.organization}}_${{ matrix.globe }}_${{ matrix.domain }}_${{ matrix.environment }}_${{ matrix.region }}
+        with:
+          name: ${{ inputs.root_name }}_${{ env.file_suffix }}errored.tfstate
+          path: "**/errored.tfstate"
+          retention-days: 7
+          if-no-files-found: ignore
