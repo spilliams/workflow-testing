@@ -10,6 +10,8 @@ on:
     inputs:
       aws_profile:
         type: string
+      dry_run:
+        type: boolean
       environment:
         type: string
       matrix_json:
@@ -64,12 +66,12 @@ jobs:
           cd ${{ env.cwd }}
           echo "terraform version"
       - name: dry run
+        if: inputs.dry_run
         run: |
-          env
-          if [ -z ${DRY_RUN+x} ]; then
-            echo "this is not a dry run"
-          fi
+          echo "this is a dry run" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
       - name: terraform apply
+        if: success()
         env:
           cwd: terraform/roots/${{ inputs.root_name }}
           BOOTSTRAP_ORGANIZATION: ${{ matrix.organization }}
