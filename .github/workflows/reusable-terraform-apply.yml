@@ -72,8 +72,6 @@ jobs:
           BOOTSTRAP_ENVIRONMENT: ${{ matrix.environment }}
           BOOTSTRAP_REGION: ${{ matrix.region }}
         run: |
-          echo "$TF_PLUGIN_CACHE_DIR"
-          tree -L 4 "$TF_PLUGIN_CACHE_DIR"
           cd ${{ env.cwd }}
           echo "terraform init"
           echo "terraform apply -auto-approve"
