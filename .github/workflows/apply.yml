@@ -13,7 +13,6 @@ defaults:
 env:
   # the true value can't be '' because that evaluates to false and messes up the ternary logic
   AFFECTED_ROOTS_OPTION: ${{ (! inputs.run_all_roots) && '--affected' || '' }}
-  DRY_RUN: ${{ (inputs.dry_run) && 'true' || '' }}
 
 on:
   push:
@@ -43,5 +42,5 @@ jobs:
       environment: dev
       matrix_json: '{"include": [{"region": "us-west-2", "environment": "dev","domain": "platform","globe": "gold","organization": "acme"}]}'
       root_name: vpc
-      dry_run: env.DRY_RUN
+      dry_run: inputs.dry_run
     secrets: inherit # pragma: allowlist secret
