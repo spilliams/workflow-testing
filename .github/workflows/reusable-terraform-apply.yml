@@ -66,7 +66,7 @@ jobs:
       - name: dry run
         run: |
           if [ -z ${DRY_RUN+x} ]; then
-            echo "dry run"
+            echo "this is not a dry run"
           fi
       - name: terraform apply
         env:
