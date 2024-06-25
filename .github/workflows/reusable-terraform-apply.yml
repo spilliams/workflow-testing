@@ -12,10 +12,6 @@ on:
         type: string
       environment:
         type: string
-      image:
-        description: Full name of the image to use
-        type: string
-        required: true
       matrix_json:
         description: A JSON string of a matrix
         type: string
@@ -51,11 +47,11 @@ jobs:
           EOF
       - name: Make sure we can read from Modules, Application repos
         run: |
-          mkdir -p /root/.ssh
-          chmod 700 /root/.ssh
-          echo '${{ secrets.ORG_READ_ONLY_SSH_KEY }}' > /root/.ssh/id_rsa
-          ssh-keyscan github.com > /root/.ssh/known_hosts
-          chmod 600 /root/.ssh/id_rsa /root/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo '${{ secrets.ORG_READ_ONLY_SSH_KEY }}' > ~/.ssh/id_rsa
+          ssh-keyscan github.com > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_rsa ~/.ssh/known_hosts
       - name: terraform version
         env:
           cwd: terraform/roots/${{ inputs.root_name }}

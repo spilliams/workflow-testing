@@ -12,8 +12,6 @@ repos:
         name: end-of-file-fixer
       - id: trailing-whitespace
         name: trailing-whitespace
-      - id: no-commit-to-branch
-        name: prevent-commits-to-default-branch
       - id: check-merge-conflict
         name: check-merge-conflict
 
