@@ -65,6 +65,7 @@ jobs:
           echo "terraform version"
       - name: dry run
         run: |
+          env
           if [ -z ${DRY_RUN+x} ]; then
             echo "this is not a dry run"
           fi
