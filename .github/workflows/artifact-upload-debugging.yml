@@ -26,7 +26,7 @@ jobs:
           mkdir -p errors
           cp terraform/roots/platform/phase/domain/env/region/root/errors.out errors/platform_phase_domain_env_region_root.error
       - name: "Upload everything"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           path: |
@@ -55,7 +55,7 @@ jobs:
     needs: touch-file
     steps:
       - name: Download plan results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: plans
       - name: Aggregate plan results
