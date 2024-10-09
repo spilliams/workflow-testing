@@ -22,6 +22,6 @@ jobs:
       - name: Send Metric
         run: |
           set -ex
-          ./scripts/put-metric-data.py '{\
+          ./scripts/print_json_args.py '{\
             "Namespace": "foo"\
           }'
