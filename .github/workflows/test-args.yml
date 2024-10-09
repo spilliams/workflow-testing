@@ -1,0 +1,27 @@
+---
+name: "Test Script Arguments"
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/checkout@v4
+      - name: Send Metric
+        run: |
+          set -ex
+          put-metric-data.py '{\
+            "Namespace": "foo"\
+          }'
