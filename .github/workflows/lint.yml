@@ -40,13 +40,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           # renovate: datasource=docker depName=python
-          python-version: "3.12"
+          python-version: "3.13.0"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform versioning=hashicorp
-          terraform_version: "1.8.2"
+          terraform_version: "1.9.8"
           terraform_wrapper: false
 
       - uses: pre-commit/action@v3.0.1
