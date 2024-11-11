@@ -17,7 +17,7 @@ jobs:
   pre-commit:
     name: Run Pre-Commit
     if: ${{ github.event.pull_request.base.ref != 'main' && !startsWith(github.event.pull_request.head.ref, 'create-pull-request/') }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     concurrency:
       group: precommit:${{github.ref}}
       cancel-in-progress: true

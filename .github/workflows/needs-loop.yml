@@ -15,20 +15,20 @@ permissions: read-all
 
 jobs:
   a:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - run: exit 0
   b:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - run: exit 1
   c:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: false
     steps:
       - uses: actions/checkout@v4
   d:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: always()
     needs:
       - a
