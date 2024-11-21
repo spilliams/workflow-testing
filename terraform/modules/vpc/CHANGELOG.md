@@ -1,5 +1,9 @@
 # VPC module
 
+## 1.2.2
+
+A tiny update. Very simple.
+
 ## 1.2.1
 
 Testing

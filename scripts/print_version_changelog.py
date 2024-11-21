@@ -1,3 +1,4 @@
+import json
 import os
 import pathlib
 import sys
@@ -20,7 +21,8 @@ def main():
     if contents is None:
         print(f"Expected module {parts[1]}'s changelog to have a heading for version {parts[2]}, but it didn't.")
         sys.exit(1)
-    print(contents)
+    # print(contents)
+    print(json.dumps({tag: contents}))
 
 
 if __name__ == "__main__":
