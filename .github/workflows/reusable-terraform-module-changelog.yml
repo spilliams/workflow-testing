@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14"
       - uses: actions/checkout@v4
         with:
           # so we can checkout any reference or relative
@@ -68,7 +68,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14"
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.compare_to }}
